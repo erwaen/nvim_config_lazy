@@ -18,4 +18,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 
 -- file explorer
 vim.keymap.set('n', '<leader>pv', ':Ex<CR>')
+-- vim.keymap.set('n', '<leader>pv', ':Oil<CR>')
 
+-- oil
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
