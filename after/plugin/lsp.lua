@@ -33,9 +33,42 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
+  ensure_installed = {
+    'pyright',
+    'ruff',
+  },
   handlers = {
     function(server_name)
-      require('lspconfig')[server_name].setup({})
+      local server_configs = {
+        pyright = {
+          settings = {
+            pyright = {
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = 'workspace',
+                typeCheckingMode = 'basic',
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
+        ruff = {
+          init_options = {
+            settings = {
+              organizeImports = true,
+            },
+          },
+          on_attach = function(client)
+            -- Keep hover and navigation on pyright; use ruff for linting/fixes.
+            client.server_capabilities.hoverProvider = false
+          end,
+        },
+      }
+
+      require('lspconfig')[server_name].setup(server_configs[server_name] or {})
     end,
   },
 })
@@ -67,4 +100,3 @@ cmp.setup({
     end,
   },
 })
-

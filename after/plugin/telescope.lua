@@ -1,8 +1,53 @@
-local telescope = require('telescope.builtin')
+local ok, telescope = pcall(require, "telescope")
+if not ok then
+  vim.notify("telescope.nvim is unavailable", vim.log.levels.WARN)
+  return
+end
 
--- Mapping for telescope
-vim.keymap.set('n', '<C-p>', telescope.find_files, { noremap = true, silent = true })  -- Buscar archivos
-vim.keymap.set('n', '<Leader>ps', telescope.live_grep, { noremap = true, silent = true })  -- Buscar texto en archivos
-vim.keymap.set('n', '<C-b>', telescope.buffers, { noremap = true, silent = true })  -- Buscar buffers abiertos
-vim.keymap.set('n', '<C-g>', telescope.git_files, { noremap = true, silent = true })  -- Buscar archivos en Git
+local builtin = require("telescope.builtin")
 
+telescope.setup({
+  defaults = {
+    file_ignore_patterns = {
+      "^%.git/",
+      "^node_modules/",
+      "^dist/",
+      "^build/",
+      "^coverage/",
+      "^%.expo/",
+      "^%.cache/",
+      "^%.next/",
+      "^%.turbo/",
+      "^%.parcel%-cache/",
+      "^ios/",
+      "^android/",
+      "%.swp$",
+      "^%.DS_Store$",
+    },
+    path_display = { "smart" },
+    layout_strategy = "horizontal",
+    sorting_strategy = "ascending",
+    layout_config = {
+      prompt_position = "top",
+    },
+  },
+  pickers = {
+    find_files = {
+      hidden = false,
+    },
+  },
+})
+
+local opts = { noremap = true, silent = true }
+
+local project_files = function()
+  local ok_git = pcall(builtin.git_files, opts)
+  if not ok_git then
+    builtin.find_files()
+  end
+end
+
+vim.keymap.set("n", "<leader><leader>", project_files, opts)
+vim.keymap.set("n", "<leader>ps", builtin.live_grep, opts)
+vim.keymap.set("n", "<C-b>", builtin.buffers, opts)
+vim.keymap.set("n", "<C-g>", builtin.git_files, opts)

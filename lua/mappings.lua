@@ -1,5 +1,6 @@
 vim.g.mapleader = " " -- leader as <Space>
 -- copy to my system clipboard
+vim.keymap.set('n', '<Leader>y', '"+yy')
 vim.keymap.set('v', '<Leader>y', '"+y')
 
 -- move code blocks with J or K in visual moide

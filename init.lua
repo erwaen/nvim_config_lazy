@@ -2,7 +2,7 @@ require("mappings")
 require("config.lazy")
 
 vim.opt.termguicolors = true
-vim.cmd.colorscheme('tokyonight')
+vim.cmd.colorscheme('rose-pine')
 
 vim.cmd [[
   highlight Normal guibg=NONE ctermbg=NONE
@@ -27,4 +27,3 @@ vim.cmd("set relativenumber")
 vim.opt.wrap = false
 
 vim.opt.signcolumn = "auto"
-
